@@ -12,7 +12,8 @@ def home():
 def not_found(error):
     erro = 404
     desc = "Pagina ou produto não encontrado"
-    return render_template("erro.html", error=erro, descricao=desc), 404
+    return render_template("erro.html", error=erro, descricao=desc)
+    
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

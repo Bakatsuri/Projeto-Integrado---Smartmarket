@@ -1,14 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smartmarket</title>
-</head>
-<body>
-    <h1>Teste sistema
+<html lang="pt-BR">
 
-        
-    </h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smartmarket</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #222;
+      background: #f4f4f4;
+    }
+
+    .topnav {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      padding: 0 1rem;
+      background: #fff;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+    }
+
+    .brand {
+      color: #04AA6D;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 0.7rem 0.9rem;
+      border-radius: 6px;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: #04AA6D;
+      color: #fff;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #222;
+      cursor: pointer;
+    }
+
+    .menu-toggle:hover {
+      background: #f0f0f0;
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .search-form {
+      display: flex;
+      width: min(100%, 320px);
+      margin-left: auto;
+      padding-left: 0.75rem;
+    }
+
+    .search-form input {
+      flex: 1;
+      min-width: 0;
+      padding: 0.65rem 0.8rem;
+      border: 1px solid #bbb;
+      border-right: 0;
+      border-radius: 6px 0 0 6px;
+      font: inherit;
+    }
+
+    .search-form button {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      border: 0;
+      border-radius: 0 6px 6px 0;
+      background: #04AA6D;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .search-form button:hover {
+      background: #038a58;
+    }
+
+    .search-form svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    main {
+      padding: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .topnav {
+        min-height: 60px;
+      }
+
+      .menu-toggle {
+        display: grid;
+        place-items: center;
+      }
+
+      .nav-links {
+        position: absolute;
+        z-index: 1;
+        top: 100%;
+        right: 0;
+        left: 0;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        padding: 0.5rem 1rem 1rem;
+        background: #fff;
+        box-shadow: 0 6px 8px rgb(0 0 0 / 10%);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 0.85rem 1rem;
+      }
+
+      .search-form {
+        width: 100%;
+        margin: 0.5rem 0 0;
+        padding: 0;
+      }
+
+      .search-form input {
+        padding: 0.75rem 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="topnav" aria-label="Navegação principal">
+    <a class="brand" href= />Smartmarket</a>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        aria-hidden="true">
+        <path d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+    <div class="nav-links" id="nav-links">
+      <a href="#about">Sobre</a>
+      <form class="search-form" action="{{ url_for('produto.produto') }}" method="get" role="search">
+        <input type="search" name="q" placeholder="Pesquisar" aria-label="Pesquisar no site">
+        <button type="submit" aria-label="Pesquisar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5"></circle>
+            <path d="m16 16 5 5"></path>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Bem vindo</h1>
+    <p></p>
+  </main>
+
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('#nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', isOpen);
+      menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+    });
+  </script>
 </body>
+
 </html>

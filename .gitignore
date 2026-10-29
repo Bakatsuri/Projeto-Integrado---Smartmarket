@@ -1,0 +1,28 @@
+
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Arquivos temporários e cache do Python
+__pycache__/
+*.py[cod]
+
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.example
+credenciais.json
+credentials.json
+service-account*.json
+
+# Logs
+*.log
+
+# Configurações locais de editores
+.vscode/
+.idea/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
