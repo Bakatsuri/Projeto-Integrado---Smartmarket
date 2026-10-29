@@ -46,11 +46,7 @@ def produto():
                 busca=nome
             )
 
-        return render_template(
-            "erro.html",
-            error=404,
-            descricao="Nenhum produto encontrado"
-        ), 404
 
 
     return render_template("produto.html", produto=None)
+

@@ -28,6 +28,7 @@ def buscar_por_nome(nome):
 
 
 def buscar_por_id(id_produto):
+    id_produto = str(id_produto).strip()
     produtos = listar_produtos()
 
     for produto in produtos:

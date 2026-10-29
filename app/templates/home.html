@@ -4,108 +4,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Smartmarket</title>
+  <meta name="theme-color" content="#0daa4f">
+  <title>SmartMarket</title>
+
   <style>
+    :root {
+      --primary: #292b2a;
+      --primary-dark: #0cb17a;
+      --background: #6e6b65;
+      --surface: #0daa4f;
+      --text: #202923;
+      --muted: #ffffff;
+      --border: #e1e8e3;
+      --radius: 16px;
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
       font-family: Arial, Helvetica, sans-serif;
-      color: #222;
-      background: #f4f4f4;
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
     }
 
     .topnav {
       position: relative;
+      z-index: 10;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      min-height: 64px;
-      padding: 0 1rem;
-      background: #fff;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+      gap: 1rem;
+      min-height: 68px;
+      padding: 0 max(5%, calc((100% - 1120px) / 2));
+      background: var(--surface);
+      box-shadow: 0 2px 12px rgb(0 0 0 / 5%);
     }
 
     .brand {
-      color: #04AA6D;
-      font-size: 1.2rem;
-      font-weight: 700;
+      flex-shrink: 0;
+      color: var(--primary);
+      font-size: 1.3rem;
+      font-weight: 800;
       text-decoration: none;
+      letter-spacing: -0.5px;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 1rem;
+      flex: 1;
     }
 
-    .nav-links a {
-      display: block;
-      padding: 0.7rem 0.9rem;
-      border-radius: 6px;
-      color: #333;
+    .home-link {
+      color: var(--text);
+      font-weight: 600;
       text-decoration: none;
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
-      background: #04AA6D;
-      color: #fff;
-    }
-
-    .menu-toggle {
-      display: none;
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      color: #222;
-      cursor: pointer;
-    }
-
-    .menu-toggle:hover {
-      background: #f0f0f0;
-    }
-
-    .menu-toggle svg {
-      width: 24px;
-      height: 24px;
+    .home-link:hover {
+      color: var(--primary);
     }
 
     .search-form {
       display: flex;
-      width: min(100%, 320px);
+      width: min(100%, 360px);
       margin-left: auto;
-      padding-left: 0.75rem;
     }
 
     .search-form input {
-      flex: 1;
+      width: 100%;
       min-width: 0;
-      padding: 0.65rem 0.8rem;
-      border: 1px solid #bbb;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--border);
       border-right: 0;
-      border-radius: 6px 0 0 6px;
-      font: inherit;
+      border-radius: 9px 0 0 9px;
+      outline-offset: 2px;
+      background: #fafcfb;
+      color: var(--text);
+    }
+
+    .search-form input:focus {
+      border-color: var(--primary);
+      outline: none;
     }
 
     .search-form button {
       display: grid;
       place-items: center;
-      width: 44px;
+      flex-shrink: 0;
+      width: 46px;
       border: 0;
-      border-radius: 0 6px 6px 0;
-      background: #04AA6D;
-      color: #fff;
+      border-radius: 0 9px 9px 0;
+      background: var(--primary);
+      color: var(--muted);
       cursor: pointer;
     }
 
     .search-form button:hover {
-      background: #038a58;
+      background: var(--primary-dark);
     }
 
     .search-form svg {
@@ -113,51 +120,85 @@
       height: 20px;
     }
 
-    main {
-      padding: 1rem;
+    .menu-toggle {
+      display: none;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
     }
 
-    @media (max-width: 600px) {
+    .menu-toggle:hover {
+      background: var(--background);
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    main {
+      width: min(100% - 32px, 1040px);
+      min-height: calc(100vh - 68px);
+      min-height: calc(100dvh - 68px);
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: var(--text);
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+    }
+
+    @media (max-width: 700px) {
       .topnav {
-        min-height: 60px;
+        min-height: 62px;
+        gap: 8px;
+        padding: 8px 16px;
+      }
+
+      .brand {
+        font-size: 1.15rem;
       }
 
       .menu-toggle {
         display: grid;
-        place-items: center;
+        flex-shrink: 0;
+        margin-left: auto;
       }
 
       .nav-links {
         position: absolute;
-        z-index: 1;
         top: 100%;
         right: 0;
         left: 0;
         display: none;
-        flex-direction: column;
         align-items: stretch;
-        gap: 0.25rem;
-        padding: 0.5rem 1rem 1rem;
-        background: #fff;
-        box-shadow: 0 6px 8px rgb(0 0 0 / 10%);
+        flex-direction: column;
+        gap: 16px;
+        padding: 18px 16px;
+        border-top: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: 0 8px 14px rgb(0 0 0 / 8%);
       }
 
       .nav-links.open {
         display: flex;
       }
 
-      .nav-links a {
-        padding: 0.85rem 1rem;
-      }
-
       .search-form {
         width: 100%;
-        margin: 0.5rem 0 0;
-        padding: 0;
+        margin: 0;
       }
 
-      .search-form input {
-        padding: 0.75rem 0.8rem;
+      main {
+        width: min(100% - 24px, 520px);
+        padding-top: 24px;
       }
     }
   </style>
@@ -165,17 +206,22 @@
 
 <body>
   <nav class="topnav" aria-label="Navegação principal">
-    <a class="brand" href= />Smartmarket</a>
+    <a class="brand" href="/">SmartMarket</a>
+
     <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         aria-hidden="true">
         <path d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
     </button>
+
     <div class="nav-links" id="nav-links">
-      <a href="#about">Sobre</a>
+
+
       <form class="search-form" action="{{ url_for('produto.produto') }}" method="get" role="search">
-        <input type="search" name="q" placeholder="Pesquisar" aria-label="Pesquisar no site">
+        <input type="search" name="q" placeholder="Pesquisar produto..." aria-label="Pesquisar produto"
+          value="{{ request.args.get('q', '') }}">
+
         <button type="submit" aria-label="Pesquisar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             aria-hidden="true">
@@ -188,19 +234,25 @@
   </nav>
 
   <main>
-    <h1>Bem vindo</h1>
+    <h1>Bem-vindo</h1>
     <p></p>
   </main>
 
   <script>
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('#nav-links');
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
 
-    menuToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      menuToggle.setAttribute('aria-expanded', isOpen);
-      menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
-    });
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute(
+          "aria-label",
+          isOpen ? "Fechar menu" : "Abrir menu"
+        );
+      });
+    }
   </script>
 </body>
 

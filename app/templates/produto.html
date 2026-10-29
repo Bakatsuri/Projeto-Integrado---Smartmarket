@@ -4,8 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Smartmarket</title>
+  <meta name="theme-color" content="#087f5b">
+
+  <title>{% if produto %}{{ produto.nome }} | SmartMarket{% else %}SmartMarket{% endif %}</title>
+
   <style>
+    :root {
+      --primary: #292b2a;
+      --primary-dark: #0cb17a;
+      --background: #6e6b65;
+      --surface: #0daa4f;
+      --text: #202923;
+      --muted: #ffffff;
+      --border: #e1e8e3;
+      --radius: 16px;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -15,98 +29,90 @@
       min-height: 100vh;
       min-height: 100dvh;
       font-family: Arial, Helvetica, sans-serif;
-      color: #222;
-      background: #f4f4f4;
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
     }
 
     .topnav {
       position: relative;
+      z-index: 10;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      min-height: 64px;
-      padding: 0 1rem;
-      background: #fff;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+      gap: 1rem;
+      min-height: 68px;
+      padding: 0 max(5%, calc((100% - 1120px) / 2));
+      background: var(--surface);
+      box-shadow: 0 2px 12px rgb(0 0 0 / 5%);
     }
 
     .brand {
-      color: #04AA6D;
-      font-size: 1.2rem;
-      font-weight: 700;
+      flex-shrink: 0;
+      color: var(--primary);
+      font-size: 1.3rem;
+      font-weight: 800;
       text-decoration: none;
+      letter-spacing: -0.5px;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 1rem;
+      flex: 1;
     }
 
-    .nav-links a {
-      display: block;
-      padding: 0.7rem 0.9rem;
-      border-radius: 6px;
-      color: #333;
+    .home-link {
+      color: var(--text);
+      font-weight: 600;
       text-decoration: none;
     }
 
-    .nav-links a:hover {
-      background: #04AA6D;
-      color: #fff;
-    }
-
-    .menu-toggle {
-      display: none;
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      color: #222;
-      cursor: pointer;
-    }
-
-    .menu-toggle:hover {
-      background: #f0f0f0;
-    }
-
-    .menu-toggle svg {
-      width: 24px;
-      height: 24px;
+    .home-link:hover {
+      color: var(--primary);
     }
 
     .search-form {
       display: flex;
-      width: min(100%, 320px);
+      width: min(100%, 360px);
       margin-left: auto;
-      padding-left: 0.75rem;
     }
 
     .search-form input {
-      flex: 1;
+      width: 100%;
       min-width: 0;
-      padding: 0.65rem 0.8rem;
-      border: 1px solid #bbb;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--border);
       border-right: 0;
-      border-radius: 6px 0 0 6px;
-      font: inherit;
+      border-radius: 9px 0 0 9px;
+      outline-offset: 2px;
+      background: #fafcfb;
+    }
+
+    .search-form input:focus {
+      border-color: var(--primary);
+      outline: none;
     }
 
     .search-form button {
       display: grid;
       place-items: center;
-      width: 44px;
+      flex-shrink: 0;
+      width: 46px;
       border: 0;
-      border-radius: 0 6px 6px 0;
-      background: #04AA6D;
-      color: #fff;
+      border-radius: 0 9px 9px 0;
+      background: var(--primary);
+      color: white;
       cursor: pointer;
     }
 
     .search-form button:hover {
-      background: #038a58;
+      background: var(--primary-dark);
     }
 
     .search-form svg {
@@ -114,59 +120,331 @@
       height: 20px;
     }
 
-    main {
-      min-height: calc(100vh - 64px);
-      min-height: calc(100dvh - 64px);
-      width: 100%;
-      background: #d3d3d3;
+    .menu-toggle {
+      display: none;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
     }
 
-    @media (max-width: 600px) {
+    .menu-toggle:hover {
+      background: var(--background);
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    main {
+      width: min(100% - 32px, 1040px);
+      min-height: calc(100vh - 68px);
+      min-height: calc(100dvh - 68px);
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+
+    .breadcrumb {
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumb a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    /* Cartão externo: ocupa toda a largura disponível */
+    .product-card {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 8px 28px rgb(26 54 39 / 5%);
+    }
+
+    /* Área interna com imagem e informações lado a lado */
+    .product-visual {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      padding: 32px;
+      background: #edf4ef;
+    }
+
+    .product-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: start;
+      gap: 32px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    /* Contêiner da imagem com borda e cantos arredondados */
+    .product-image-container {
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      background: #f9fafb;
+    }
+
+    .product-image {
+      display: block;
+      width: 100%;
+      height: 320px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .image-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 320px;
+      padding: 16px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .product-info {
+      min-width: 0;
+      padding: 0;
+      overflow-wrap: break-word;
+    }
+
+    .category {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 5px 11px;
+      border-radius: 100px;
+      background: #e4f4eb;
+      color: var(--primary-dark);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .product-info h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .product-id {
+      margin: 0 0 24px;
+      color: black;
+      font-size: 0.9rem;
+    }
+
+    .price-label {
+      margin: 0;
+      color: black;
+      font-size: 0.9rem;
+    }
+
+    .price {
+      margin: 2px 0 24px;
+      color: var(--primary-dark);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+    }
+
+    .location-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 0;
+    }
+
+    .location-item {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fbfcfb;
+    }
+
+    .location-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .location-value {
+      display: block;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .detail-card {
+      min-width: 0;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .detail-card h2 {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+    }
+
+    .detail-card p {
+      margin: 0;
+      color: black;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+
+    .empty-state {
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      max-width: 560px;
+      margin: 50px auto;
+      padding: 40px 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      text-align: center;
+    }
+
+    .empty-state h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    .empty-state p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .empty-state svg {
+      width: 54px;
+      height: 54px;
+      color: var(--primary);
+    }
+
+    .footer {
+      padding: 20px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
       .topnav {
-        min-height: 60px;
+        min-height: 62px;
+        gap: 8px;
+        padding: 8px 16px;
       }
 
-      main {
-        min-height: calc(100vh - 60px);
-        min-height: calc(100dvh - 60px);
+      .brand {
+        font-size: 1.15rem;
       }
 
       .menu-toggle {
         display: grid;
-        place-items: center;
+        flex-shrink: 0;
       }
 
       .nav-links {
         position: absolute;
-        z-index: 1;
         top: 100%;
         right: 0;
         left: 0;
         display: none;
-        flex-direction: column;
         align-items: stretch;
-        gap: 0.25rem;
-        padding: 0.5rem 1rem 1rem;
-        background: #fff;
-        box-shadow: 0 6px 8px rgb(0 0 0 / 10%);
+        flex-direction: column;
+        gap: 16px;
+        padding: 18px 16px;
+        border-top: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: 0 8px 14px rgb(0 0 0 / 8%);
       }
 
       .nav-links.open {
         display: flex;
       }
 
-      .nav-links a {
-        padding: 0.85rem 1rem;
-      }
-
       .search-form {
         width: 100%;
-        margin: 0.5rem 0 0;
-        padding: 0;
+        margin: 0;
       }
 
-      .search-form input {
-        padding: 0.75rem 0.8rem;
+      main {
+        width: min(100% - 24px, 520px);
+        padding-top: 24px;
+      }
+
+      .product-visual {
+        padding: 20px;
+      }
+
+      .product-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+      }
+
+      .product-image {
+        height: 260px;
+      }
+
+      .image-placeholder {
+        min-height: 260px;
+      }
+
+      .location-grid {
+        gap: 7px;
+      }
+
+      .location-item {
+        padding: 10px 8px;
+      }
+
+      .location-label {
+        font-size: 0.72rem;
+      }
+
+      .location-value {
+        font-size: 0.9rem;
+      }
+
+      .detail-card {
+        padding: 18px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .location-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -174,17 +452,21 @@
 
 <body>
   <nav class="topnav" aria-label="Navegação principal">
-    <a class="brand" href= />Smartmarket</a>
+    <a class="brand" href="/">SmartMarket</a>
+
     <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         aria-hidden="true">
         <path d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
     </button>
+
     <div class="nav-links" id="nav-links">
-      <a href=>Sobre</a>
+
       <form class="search-form" action="{{ url_for('produto.produto') }}" method="get" role="search">
-        <input type="search" name="q" placeholder="Pesquisar" aria-label="Pesquisar no site">
+        <input type="search" name="q" placeholder="Pesquisar produto..." aria-label="Pesquisar produto"
+          value="{{ request.args.get('q', '') }}">
+
         <button type="submit" aria-label="Pesquisar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             aria-hidden="true">
@@ -196,27 +478,115 @@
     </div>
   </nav>
 
-  <main><main>
+  <main>
     {% if produto %}
-        <h1>{{ produto.nome }}</h1>
-        <p>Preço: R$ {{ produto.preco }}</p>
-        <p>Categoria: {{ produto.categoria }}</p>
-        <p>Corredor: {{ produto.corredor }}</p>
-        <p>Gôndola: {{ produto.gondola }}</p>
+    <div class="breadcrumb">
+      <a href="/">Início</a> / Produto
+    </div>
+
+    <article class="product-card">
+      <div class="product-visual">
+        <div class="product-layout">
+          <div class="product-image-container">
+            {% if produto.imagem %}
+            <img class="product-image" src="{{ produto.imagem }}" alt="Imagem de {{ produto.nome }}" loading="lazy">
+            {% else %}
+            <div class="image-placeholder">
+              <span style="color: black;">Imagem indisponível</span>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="product-info">
+            {% if produto.categoria %}
+            <span class="category">{{ produto.categoria }}</span>
+            {% endif %}
+
+            <h1>{{ produto.nome }}</h1>
+
+            {% if produto.id is defined and produto.id|string|trim %}
+            <p class="product-id">Código do produto: {{ produto.id }}</p>
+            {% endif %}
+
+            <p class="price-label">Preço</p>
+
+            <p class="price">
+              {% if produto.preco is defined and produto.preco|string|trim %}
+              R$ {{ "%.2f"|format(produto.preco|float)|replace(".", ",") }} {% if produto.kg %} / kg{% endif %}
+              {% else %}
+              Preço não informado
+              {% endif %}
+            </p>
+
+            <h2 class="section-title">Localização na loja</h2>
+
+            <div class="location-grid">
+              <div class="location-item">
+                <span class="location-label">Corredor</span>
+                <span class="location-value">
+                  {{ produto.corredor if produto.corredor else "Não informado" }}
+                </span>
+              </div>
+
+              <div class="location-item">
+                <span class="location-label">Gôndola</span>
+                <span class="location-value">
+                  {{ produto.gondola if produto.gondola else "Não informada" }}
+                </span>
+              </div>
+
+              <div class="location-item">
+                <span class="location-label">Nicho</span>
+                <span class="location-value">
+                  {{ produto.nicho if produto.nicho else "Não informado" }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="details">
+      <div class="detail-card">
+        <h2>Ingredientes</h2>
+        <p>{{ produto.ingredientes if produto.ingredientes else "Informações não disponíveis." }}</p>
+      </div>
+
+      <div class="detail-card">
+        <h2>Informações nutricionais</h2>
+        <p>{{ produto.info_nutri if produto.info_nutri else "Informações não disponíveis." }}</p>
+      </div>
+    </section>
+
     {% else %}
-        <p>Pesquise um produto ou acesse um produto pelo QR Code.</p>
+    <section class="empty-state">
+      <h1>Produto não encontrado</h1>
+      <p>Não foi possível encontrar o produto solicitado.</p>
+      <a href="/">Voltar ao início</a>
+    </section>
     {% endif %}
-</main></main>
+  </main>
+
+  <footer class="footer">
+    SmartMarket
+  </footer>
 
   <script>
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('#nav-links');
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
 
-    menuToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      menuToggle.setAttribute('aria-expanded', isOpen);
-      menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
-    });
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute(
+          "aria-label",
+          isOpen ? "Fechar menu" : "Abrir menu"
+        );
+      });
+    }
   </script>
 </body>
 
