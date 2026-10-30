@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from produto import produto_bp
 
-app = Flask(__name__, template_folder="../templates")
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.register_blueprint(produto_bp)
 
 @app.route("/")

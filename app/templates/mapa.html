@@ -1,0 +1,259 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mapa.css') }}">
+
+<section
+    class="map-section"
+    id="market-map"
+    data-mode="{{ modo_mapa | default('home') }}"
+    data-target-nicho="{{ produto_mapa.nicho | default('') if produto_mapa else '' }}"
+    data-target-corredor="{{ produto_mapa.corredor | default('') if produto_mapa else '' }}"
+    data-target-gondola="{{ produto_mapa.gondola | default('') if produto_mapa else '' }}"
+    data-target-lado="{{ produto_mapa.lado | default('') if produto_mapa else '' }}"
+    data-target-parte="{{ produto_mapa.parte | default('') if produto_mapa else '' }}"
+>
+    <div class="map-header">
+        <div>
+            <h2>Mapa do mercado</h2>
+            <p id="map-description">
+                Selecione um setor para visualizar sua localização.
+            </p>
+        </div>
+    </div>
+
+    <div class="map-layout">
+        <div class="map-container">
+            <svg
+                class="market-map"
+                viewBox="0 0 700 620"
+                role="img"
+                aria-label="Planta dos setores do mercado"
+            >
+                <rect class="map-outline" x="25" y="25" width="640" height="560"/>
+
+                <!-- CORREDOR 5: FRIOS NA LATERAL ESQUERDA -->
+                <g class="map-zone zone-blue"
+                   data-corridor="5" data-sector="Frios e congelados"
+                   data-nichos="Laticínios,Congelados,Açougue,Açougue e Ovos"
+                   data-side="1" data-part="1">
+                    <rect x="45" y="40" width="65" height="95" rx="4"/>
+                    <text x="77" y="85">Frios e</text>
+                    <text x="77" y="103">congelados</text>
+                </g>
+
+                <g class="map-zone zone-blue"
+                   data-corridor="5" data-sector="Frios e congelados"
+                   data-nichos="Laticínios,Congelados,Açougue,Açougue e Ovos"
+                   data-side="1" data-part="2">
+                    <rect x="45" y="135" width="65" height="95" rx="4"/>
+                </g>
+
+                <!-- CORREDOR 4: FRIOS NA PARTE SUPERIOR -->
+                <g class="map-zone zone-blue"
+                   data-corridor="4" data-sector="Frios e congelados"
+                   data-nichos="Laticínios,Congelados,Açougue,Açougue e Ovos"
+                   data-side="1" data-part="1">
+                    <rect x="130" y="40" width="87" height="55" rx="4"/>
+                </g>
+
+                <g class="map-zone zone-blue"
+                   data-corridor="4" data-sector="Frios e congelados"
+                   data-nichos="Laticínios,Congelados,Açougue,Açougue e Ovos"
+                   data-side="2" data-part="1">
+                    <rect x="217" y="40" width="88" height="55" rx="4"/>
+                </g>
+
+                <g class="map-zone zone-blue"
+                   data-corridor="4" data-sector="Frios e congelados"
+                   data-nichos="Laticínios,Congelados,Açougue,Açougue e Ovos"
+                   data-side="1" data-part="2">
+                    <rect x="130" y="105" width="87" height="25" rx="3"/>
+                </g>
+
+                <g class="map-zone zone-blue"
+                   data-corridor="4" data-sector="Frios e congelados"
+                   data-nichos="Laticínios,Congelados,Açougue,Açougue e Ovos"
+                   data-side="2" data-part="2">
+                    <rect x="217" y="105" width="88" height="25" rx="3"/>
+                </g>
+
+                <!-- CORREDOR 2: HORTIFRUTI SUPERIOR -->
+                <g class="map-zone zone-green"
+                   data-corridor="2" data-sector="Hortifruti"
+                   data-nichos="Hortifruti"
+                   data-side="1" data-part="1">
+                    <rect x="350" y="40" width="87" height="55" rx="4"/>
+                </g>
+
+                <g class="map-zone zone-green"
+                   data-corridor="2" data-sector="Hortifruti"
+                   data-nichos="Hortifruti"
+                   data-side="2" data-part="1">
+                    <rect x="437" y="40" width="88" height="55" rx="4"/>
+                </g>
+
+                <g class="map-zone zone-green"
+                   data-corridor="2" data-sector="Hortifruti"
+                   data-nichos="Hortifruti"
+                   data-side="1" data-part="2">
+                    <rect x="350" y="105" width="87" height="25" rx="3"/>
+                </g>
+
+                <g class="map-zone zone-green"
+                   data-corridor="2" data-sector="Hortifruti"
+                   data-nichos="Hortifruti"
+                   data-side="2" data-part="2">
+                    <rect x="437" y="105" width="88" height="25" rx="3"/>
+                </g>
+
+                <!-- CORREDOR 1: HORTIFRUTI NA LATERAL DIREITA -->
+                <g class="map-zone zone-green"
+                   data-corridor="1" data-sector="Hortifruti"
+                   data-nichos="Hortifruti"
+                   data-side="1" data-part="1">
+                    <rect x="545" y="40" width="65" height="90" rx="4"/>
+                    <text x="577" y="90">Hortifruti</text>
+                </g>
+
+                <g class="map-zone zone-green"
+                   data-corridor="1" data-sector="Hortifruti"
+                   data-nichos="Hortifruti"
+                   data-side="1" data-part="2">
+                    <rect x="545" y="130" width="65" height="90" rx="4"/>
+                </g>
+
+                <!-- CORREDOR 5: PADARIA NA LATERAL ESQUERDA -->
+                <g class="map-zone zone-orange"
+                   data-corridor="5" data-sector="Padaria"
+                   data-nichos="Padaria"
+                   data-side="2" data-part="1">
+                    <rect x="45" y="250" width="65" height="110" rx="4"/>
+                    <text x="77" y="310">Padaria</text>
+                </g>
+
+                <g class="map-zone zone-orange"
+                   data-corridor="5" data-sector="Padaria"
+                   data-nichos="Padaria"
+                   data-side="2" data-part="2">
+                    <rect x="45" y="360" width="65" height="110" rx="4"/>
+                </g>
+
+                <!-- CORREDOR 4: MERCEARIA -->
+                <!-- Lado 1 -->
+                {% for parte, y in [(1,210),(2,265),(3,320),(4,375)] %}
+                <g class="map-zone zone-yellow"
+                   data-corridor="4" data-sector="Mercearia"
+                   data-nichos="Mercearia"
+                   data-side="1" data-part="{{ parte }}">
+                    <rect x="155" y="{{ y }}" width="45" height="55" rx="2"/>
+                </g>
+                {% endfor %}
+
+                <!-- Lado 2 -->
+                {% for parte, y in [(1,210),(2,265),(3,320),(4,375)] %}
+                <g class="map-zone zone-yellow"
+                   data-corridor="4" data-sector="Mercearia"
+                   data-nichos="Mercearia"
+                   data-side="2" data-part="{{ parte }}">
+                    <rect x="200" y="{{ y }}" width="45" height="55" rx="2"/>
+                </g>
+                {% endfor %}
+
+                <text class="aisle-label" x="200" y="325">Mercearia</text>
+
+                <!-- CORREDOR 3: HIGIENE E LIMPEZA -->
+                <!-- Lado 1 -->
+                {% for parte, y in [(1,210),(2,265),(3,320),(4,375)] %}
+                <g class="map-zone zone-lilac"
+                   data-corridor="3" data-sector="Higiene e limpeza"
+                   data-nichos="Higiene e limpeza"
+                   data-side="1" data-part="{{ parte }}">
+                    <rect x="275" y="{{ y }}" width="45" height="55" rx="2"/>
+                </g>
+                {% endfor %}
+
+                <!-- Lado 2 -->
+                {% for parte, y in [(1,210),(2,265),(3,320),(4,375)] %}
+                <g class="map-zone zone-lilac"
+                   data-corridor="3" data-sector="Higiene e limpeza"
+                   data-nichos="Higiene e limpeza"
+                   data-side="2" data-part="{{ parte }}">
+                    <rect x="320" y="{{ y }}" width="45" height="55" rx="2"/>
+                </g>
+                {% endfor %}
+
+                <text class="aisle-label" x="320" y="315">Higiene e</text>
+                <text class="aisle-label" x="320" y="333">limpeza</text>
+
+                <!-- CORREDOR 2: PET SHOP E UTILIDADES -->
+                <!-- Lado 1 -->
+                {% for parte, y in [(1,210),(2,265),(3,320),(4,375)] %}
+                <g class="map-zone zone-teal"
+                   data-corridor="2" data-sector="Pet shop e utilidades"
+                   data-nichos="Pet shop,Utilidades"
+                   data-side="1" data-part="{{ parte }}">
+                    <rect x="395" y="{{ y }}" width="45" height="55" rx="2"/>
+                </g>
+                {% endfor %}
+
+                <!-- Lado 2 -->
+                {% for parte, y in [(1,210),(2,265),(3,320),(4,375)] %}
+                <g class="map-zone zone-teal"
+                   data-corridor="2" data-sector="Pet shop e utilidades"
+                   data-nichos="Pet shop,Utilidades"
+                   data-side="2" data-part="{{ parte }}">
+                    <rect x="440" y="{{ y }}" width="45" height="55" rx="2"/>
+                </g>
+                {% endfor %}
+
+                <text class="aisle-label" x="440" y="315">Pet shop e</text>
+                <text class="aisle-label" x="440" y="333">utilidades</text>
+
+                <!-- CORREDOR 1: BEBIDAS NA LATERAL DIREITA -->
+                <g class="map-zone zone-purple"
+                   data-corridor="1" data-sector="Bebidas"
+                   data-nichos="Bebidas"
+                   data-side="2" data-part="1">
+                    <rect x="545" y="245" width="65" height="105" rx="4"/>
+                    <text x="577" y="300">Bebidas</text>
+                </g>
+
+                <g class="map-zone zone-purple"
+                   data-corridor="1" data-sector="Bebidas"
+                   data-nichos="Bebidas"
+                   data-side="2" data-part="2">
+                    <rect x="545" y="370" width="65" height="105" rx="4"/>
+                    <text x="577" y="425">Bebidas</text>
+                </g>
+
+                <!-- CAIXAS -->
+                <g class="checkout-zone">
+                    <rect x="45" y="535" width="260" height="40" rx="3"/>
+                    <text x="175" y="560">CAIXAS</text>
+                </g>
+
+                <!-- ENTRADA E SAÍDA -->
+                <text class="map-door" x="400" y="560">SAÍDA</text>
+                <text class="map-door" x="570" y="560">ENTRADA</text>
+            </svg>
+        </div>
+
+        <aside class="map-info" aria-live="polite">
+            <h3 id="map-info-title">Setores do mercado</h3>
+            <p id="map-info-text">
+                Selecione uma área do mapa para ver sua localização.
+            </p>
+
+            <div id="map-legend" class="map-legend">
+                <span><i class="legend-color green"></i> Hortifruti</span>
+                <span><i class="legend-color purple"></i> Bebidas</span>
+                <span><i class="legend-color blue"></i> Frios e congelados</span>
+                <span><i class="legend-color orange"></i> Padaria</span>
+                <span><i class="legend-color yellow"></i> Mercearia</span>
+                <span><i class="legend-color lilac"></i> Higiene e limpeza</span>
+                <span><i class="legend-color teal"></i> Pet shop e utilidades</span>
+                <span><i class="legend-color black"></i> Caixas</span>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/mapa.js') }}" defer></script>

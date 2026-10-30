@@ -39,12 +39,12 @@ def produto():
                 produto=buscar_por_id(resultados[0]["id"])
             )
 
-        if len(resultados) > 1:
-            return render_template(
-                "resultados.html",
-                produtos=resultados,
-                busca=nome
-            )
+#        if len(resultados) > 1:
+#            return render_template(
+#                "resultados.html",
+#                produtos=resultados,
+#                busca=nome
+#            )
 
 
 

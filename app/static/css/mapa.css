@@ -1,0 +1,234 @@
+.map-section {
+    width: 100%;
+    margin: 30px auto;
+    color: var(--text);
+}
+
+.map-header {
+    margin-bottom: 18px;
+}
+
+.map-header h2 {
+    margin-bottom: 5px;
+    color: var(--primary);
+}
+
+.map-header p {
+    color: var(--text);
+}
+
+.map-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.map-container {
+    width: 100%;
+    padding: 15px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.market-map {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.map-outline {
+    fill: #fafcfb;
+    stroke: #222;
+    stroke-width: 4;
+}
+
+.map-zone {
+    cursor: pointer;
+    transition: opacity 0.2s, filter 0.2s;
+}
+
+.map-zone rect {
+    stroke: #333;
+    stroke-width: 2;
+}
+
+.map-zone text,
+.aisle-label {
+    fill: #202923;
+    font-size: 13px;
+    font-weight: 600;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.zone-green rect {
+    fill: #19c95b;
+}
+
+.zone-purple rect {
+    fill: #5630d8;
+}
+
+.zone-blue rect {
+    fill: #2196e9;
+}
+
+.zone-orange rect {
+    fill: #f28c28;
+}
+
+.zone-yellow rect {
+    fill: #f7c94b;
+}
+
+.zone-lilac rect {
+    fill: #b99add;
+}
+
+.zone-teal rect {
+    fill: #55b5b5;
+}
+
+.checkout-zone rect {
+    fill: #202020;
+    stroke: #444;
+}
+
+.checkout-zone text {
+    fill: white;
+    font-size: 15px;
+    font-weight: bold;
+    text-anchor: middle;
+}
+
+.map-door {
+    fill: var(--text);
+    font-size: 20px;
+    font-weight: bold;
+    text-anchor: middle;
+}
+
+.map-zone:hover {
+    filter: brightness(1.12);
+}
+
+.map-zone.selected rect,
+.map-zone.highlighted rect {
+    stroke: #111;
+    stroke-width: 4;
+    filter: brightness(1.15);
+}
+
+.map-zone.dimmed {
+    opacity: 0.25;
+}
+
+.map-info {
+    padding: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.map-info h3 {
+    margin-top: 0;
+    color: var(--primary);
+}
+
+.map-info p {
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+.map-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.map-legend span {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 14px;
+}
+
+.legend-color {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+}
+
+.legend-color.green {
+    background: #19c95b;
+}
+
+.legend-color.purple {
+    background: #5630d8;
+}
+
+.legend-color.blue {
+    background: #2196e9;
+}
+
+.legend-color.orange {
+    background: #f28c28;
+}
+
+.legend-color.yellow {
+    background: #f7c94b;
+}
+
+.legend-color.lilac {
+    background: #b99add;
+}
+
+.legend-color.teal {
+    background: #55b5b5;
+}
+
+.legend-color.black {
+    background: #202020;
+}
+
+@media (max-width: 700px) {
+    .map-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .map-container {
+        padding: 5px;
+    }
+
+    .map-info {
+        padding: 14px;
+    }
+}
+/* Melhorar a visibilidade dos nomes no mapa */
+svg text {
+    font-family: Arial, sans-serif;
+    font-weight: 700;
+    fill: #17212b;
+    paint-order: stroke;
+    stroke: #ffffff;
+    stroke-width: 2px;
+    stroke-linejoin: round;
+}
+
+/* Nomes das áreas e setores */
+svg .mapa-label {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* Identificação dos corredores */
+svg .mapa-numero {
+    font-size: 15px;
+    font-weight: 800;
+}
