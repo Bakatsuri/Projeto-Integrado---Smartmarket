@@ -201,6 +201,106 @@
         padding-top: 24px;
       }
     }
+
+    /* QR CODE HOME */
+    #area-qrcode-home {
+      width: 300px;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin: 20px auto;
+      padding: 24px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+
+      background-color: #ffffff;
+      border: 1px solid #e1e8e3;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+      text-align: center;
+    }
+
+    #area-qrcode-home[hidden] {
+      display: none;
+    }
+
+    #area-qrcode-home h3 {
+      margin: 0;
+      color: #202923;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    #area-qrcode-home p {
+      margin: 0;
+      color: #6e6b65;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    #area-qrcode-home img {
+      display: block;
+      width: 190px;
+      height: 190px;
+      max-width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+
+      object-fit: contain;
+      background-color: #ffffff;
+      border: 1px solid #e1e8e3;
+      border-radius: 12px;
+    }
+
+    #area-qrcode-home .btn-qrcode-download {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+
+      background-color: #0cb17a;
+      color: #ffffff;
+      border-radius: 10px;
+
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      text-align: center;
+
+      transition: background-color 0.2s ease;
+    }
+
+    #area-qrcode-home .btn-qrcode-download:hover {
+      background-color: #099968;
+    }
+
+    #mostrar-qrcode-home {
+      display: inline-block;
+      padding: 11px 20px;
+
+      background-color: #0cb17a;
+      color: #ffffff;
+
+      border: none;
+      border-radius: 10px;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    #mostrar-qrcode-home:hover {
+      background-color: #099968;
+    }
+
+    #mostrar-qrcode-home:active {
+      transform: scale(0.97);
+    }
   </style>
 </head>
 
@@ -238,9 +338,34 @@
     <p></p>
     {% set modo_mapa = 'home' %}
     {% include 'mapa.html' %}
+    <div class="qrcode-container">
+      <button type="button" id="mostrar-qrcode-home" class="btn-qrcode">
+        Mostrar QR Code
+      </button>
+
+      <div id="area-qrcode-home" class="qrcode-card" hidden>
+        <h3>QR Code do SmartMarket</h3>
+
+        <p>Escaneie para acessar a página inicial.</p>
+
+        <img src="{{ url_for('qrcode_home') }}" alt="QR Code do SmartMarket" class="qrcode-image">
+
+        <a href="{{ url_for('qrcode_home', download=1) }}" class="btn-qrcode-download">
+          Baixar QR Code
+        </a>
+      </div>
+    </div>
   </main>
 
   <script>
+    const botaoQrHome = document.getElementById("mostrar-qrcode-home");
+    const areaQrHome = document.getElementById("area-qrcode-home");
+
+    if (botaoQrHome && areaQrHome) {
+      botaoQrHome.addEventListener("click", () => {
+        areaQrHome.hidden = !areaQrHome.hidden;
+      });
+    }
     const menuToggle = document.querySelector(".menu-toggle");
     const navLinks = document.querySelector(".nav-links");
 

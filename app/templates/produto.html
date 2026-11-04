@@ -447,6 +447,103 @@
         grid-template-columns: 1fr;
       }
     }
+    /* QR CODE PRODUTO */
+#area-qrcode {
+    width: 300px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 20px auto;
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+
+    background-color: #ffffff;
+    border: 1px solid #e1e8e3;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+#area-qrcode[hidden] {
+    display: none;
+}
+
+#area-qrcode img {
+    display: block;
+    width: 190px;
+    height: 190px;
+    max-width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+
+    object-fit: contain;
+    background-color: #ffffff;
+    border: 1px solid #e1e8e3;
+    border-radius: 12px;
+}
+
+#area-qrcode a {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+
+    background-color: #0cb17a;
+    color: #ffffff;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+
+    transition: background-color 0.2s ease;
+}
+
+#area-qrcode a:hover {
+    background-color: #099968;
+}
+
+/* RESPONSIVIDADE DOS DOIS */
+@media (max-width: 480px) {
+    #area-qrcode-home,
+    #area-qrcode {
+        width: 100%;
+        padding: 18px;
+    }
+
+    #area-qrcode-home img,
+    #area-qrcode img {
+        width: 170px;
+        height: 170px;
+    }
+}
+#mostrar-qrcode {
+    display: inline-block;
+    padding: 11px 20px;
+
+    background-color: #0cb17a;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#mostrar-qrcode:hover {
+    background-color: #099968;
+}
+
+#mostrar-qrcode:active {
+    transform: scale(0.97);
+}
   </style>
 </head>
 
@@ -558,7 +655,18 @@
         <p>{{ produto.info_nutri if produto.info_nutri else "Informações não disponíveis." }}</p>
       </div>
     </section>
+    <br>
+    <button type="button" id="mostrar-qrcode">
+      Mostrar QR Code
+    </button>
 
+    <div id="area-qrcode" hidden>
+      <img src="{{ url_for('produto.qrcode_produto', produto_id=produto.id) }}" alt="QR Code do produto">
+
+      <a href="{{ url_for('produto.qrcode_produto', produto_id=produto.id) }}?download=1" download>
+        Baixar QR Code
+      </a>
+    </div>
     {% else %}
     <section class="empty-state">
       <h1>Produto não encontrado</h1>
@@ -578,6 +686,12 @@
   </footer>
 
   <script>
+    const botaoQrCode = document.getElementById("mostrar-qrcode");
+    const areaQrCode = document.getElementById("area-qrcode");
+
+    botaoQrCode.addEventListener("click", () => {
+      areaQrCode.hidden = !areaQrCode.hidden;
+    });
     const menuToggle = document.querySelector(".menu-toggle");
     const navLinks = document.querySelector(".nav-links");
 
