@@ -78,6 +78,7 @@
     }
 
     .search-form {
+      position: relative;
       display: flex;
       width: min(100%, 360px);
       margin-left: auto;
@@ -113,6 +114,58 @@
 
     .search-form button:hover {
       background: var(--primary-dark);
+    }
+
+    /* AUTOCOMPLETE DA PESQUISA */
+    .search-suggestions {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 100%;
+      max-height: 280px;
+      overflow-y: auto;
+      z-index: 1000;
+
+      display: flex;
+      flex-direction: column;
+
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    }
+
+    .search-suggestions[hidden] {
+      display: none;
+    }
+
+    .search-suggestions .suggestion-item {
+      display: block;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 14px;
+
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+
+      background: #ffffff;
+      color: var(--text);
+
+      text-align: left;
+      font-weight: 400;
+      cursor: pointer;
+
+      white-space: normal;
+      overflow-wrap: break-word;
+    }
+
+    .search-suggestions .suggestion-item:last-child {
+      border-bottom: 0;
+    }
+
+    .search-suggestions .suggestion-item:hover {
+      background: #edf4ef;
     }
 
     .search-form svg {
@@ -447,103 +500,131 @@
         grid-template-columns: 1fr;
       }
     }
+
     /* QR CODE PRODUTO */
-#area-qrcode {
-    width: 300px;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 20px auto;
-    padding: 24px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-
-    background-color: #ffffff;
-    border: 1px solid #e1e8e3;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-#area-qrcode[hidden] {
-    display: none;
-}
-
-#area-qrcode img {
-    display: block;
-    width: 190px;
-    height: 190px;
-    max-width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-
-    object-fit: contain;
-    background-color: #ffffff;
-    border: 1px solid #e1e8e3;
-    border-radius: 12px;
-}
-
-#area-qrcode a {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-
-    background-color: #0cb17a;
-    color: #ffffff;
-    border-radius: 10px;
-
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    text-align: center;
-
-    transition: background-color 0.2s ease;
-}
-
-#area-qrcode a:hover {
-    background-color: #099968;
-}
-
-/* RESPONSIVIDADE DOS DOIS */
-@media (max-width: 480px) {
-    #area-qrcode-home,
     #area-qrcode {
+      width: 300px;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin: 20px auto;
+      padding: 24px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+
+      background-color: #ffffff;
+      border: 1px solid #e1e8e3;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    #area-qrcode[hidden] {
+      display: none;
+    }
+
+    #area-qrcode img {
+      display: block;
+      width: 190px;
+      height: 190px;
+      max-width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+
+      object-fit: contain;
+      background-color: #ffffff;
+      border: 1px solid #e1e8e3;
+      border-radius: 12px;
+    }
+
+    #area-qrcode a {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+
+      background-color: #0cb17a;
+      color: #ffffff;
+      border-radius: 10px;
+
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      text-align: center;
+
+      transition: background-color 0.2s ease;
+    }
+
+    #area-qrcode a:hover {
+      background-color: #099968;
+    }
+
+    /* RESPONSIVIDADE DOS DOIS */
+    @media (max-width: 480px) {
+
+      #area-qrcode-home,
+      #area-qrcode {
         width: 100%;
         padding: 18px;
-    }
+      }
 
-    #area-qrcode-home img,
-    #area-qrcode img {
+      #area-qrcode-home img,
+      #area-qrcode img {
         width: 170px;
         height: 170px;
+      }
     }
-}
-#mostrar-qrcode {
-    display: inline-block;
-    padding: 11px 20px;
 
-    background-color: #0cb17a;
-    color: #ffffff;
+    #mostrar-qrcode {
+      display: inline-block;
+      padding: 11px 20px;
 
-    border: none;
-    border-radius: 10px;
+      background-color: #0cb17a;
+      color: #ffffff;
 
-    font-size: 14px;
-    font-weight: 600;
+      border: none;
+      border-radius: 10px;
 
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
+      font-size: 14px;
+      font-weight: 600;
 
-#mostrar-qrcode:hover {
-    background-color: #099968;
-}
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
 
-#mostrar-qrcode:active {
-    transform: scale(0.97);
-}
+    #mostrar-qrcode:hover {
+      background-color: #099968;
+    }
+
+    #mostrar-qrcode:active {
+      transform: scale(0.97);
+    }
+
+    .search-results {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .search-result-item {
+      display: block;
+      padding: 12px;
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+
+      background: #ffffff;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .search-result-item:hover {
+      background: #edf4ef;
+    }
   </style>
 </head>
 
@@ -561,7 +642,9 @@
     <div class="nav-links" id="nav-links">
 
       <form class="search-form" action="{{ url_for('produto.produto') }}" method="get" role="search">
-        <input type="search" name="q" placeholder="Pesquisar produto..." aria-label="Pesquisar produto"
+
+        <input type="search" name="q" id="campo-pesquisa" placeholder="Pesquisar produto..."
+          aria-label="Pesquisar produto" aria-autocomplete="list" aria-controls="lista-sugestoes" autocomplete="off"
           value="{{ request.args.get('q', '') }}">
 
         <button type="submit" aria-label="Pesquisar">
@@ -571,6 +654,9 @@
             <path d="m16 16 5 5"></path>
           </svg>
         </button>
+
+        <div id="lista-sugestoes" class="search-suggestions" hidden></div>
+
       </form>
     </div>
   </nav>
@@ -667,13 +753,34 @@
         Baixar QR Code
       </a>
     </div>
+    {% elif resultados %}
+    <section class="empty-state">
+      <h1>Resultados da pesquisa</h1>
+      <p>Produtos encontrados para "{{ busca }}":</p>
+
+      <div class="search-results">
+        {% for item in resultados %}
+        <a href="{{ url_for('produto.produto', id=item.id) }}" class="search-result-item">
+          {{ item.nome }}
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
     {% else %}
     <section class="empty-state">
       <h1>Produto não encontrado</h1>
-      <p>Não foi possível encontrar o produto solicitado.</p>
+      <p>
+        {% if busca %}
+        Nenhum produto encontrado para "{{ busca }}".
+        {% else %}
+        Não foi possível encontrar o produto solicitado.
+        {% endif %}
+      </p>
       <a href="/">Voltar ao início</a>
     </section>
     {% endif %}
+
     {% set modo_mapa = 'produto' %}
     {% set produto_mapa = produto %}
     {% include 'mapa.html' %}
@@ -686,12 +793,76 @@
   </footer>
 
   <script>
+    const campoPesquisa = document.getElementById("campo-pesquisa");
+    const listaSugestoes = document.getElementById("lista-sugestoes");
+
+    if (campoPesquisa && listaSugestoes) {
+      let temporizador;
+
+      campoPesquisa.addEventListener("input", () => {
+        clearTimeout(temporizador);
+
+        const consulta = campoPesquisa.value.trim();
+
+        if (consulta.length < 2) {
+          listaSugestoes.hidden = true;
+          listaSugestoes.innerHTML = "";
+          return;
+        }
+
+        temporizador = setTimeout(async () => {
+          try {
+            const resposta = await fetch(
+              `/api/produtos/sugestoes?q=${encodeURIComponent(consulta)}`
+            );
+
+            if (!resposta.ok) {
+              throw new Error("Erro ao buscar sugestões");
+            }
+
+            const produtos = await resposta.json();
+
+            listaSugestoes.innerHTML = "";
+
+            produtos.forEach(produto => {
+              const opcao = document.createElement("button");
+
+              opcao.type = "button";
+              opcao.className = "suggestion-item";
+              opcao.textContent = produto.nome;
+
+              opcao.addEventListener("click", () => {
+                window.location.href =
+                  `/produto?id=${encodeURIComponent(produto.id)}`;
+              });
+
+              listaSugestoes.appendChild(opcao);
+            });
+
+            listaSugestoes.hidden = produtos.length === 0;
+
+          } catch (erro) {
+            console.error("Erro no autocomplete:", erro);
+            listaSugestoes.hidden = true;
+          }
+        }, 250);
+      });
+
+      document.addEventListener("click", evento => {
+        if (!campoPesquisa.contains(evento.target) &&
+          !listaSugestoes.contains(evento.target)) {
+          listaSugestoes.hidden = true;
+        }
+      });
+    }
     const botaoQrCode = document.getElementById("mostrar-qrcode");
     const areaQrCode = document.getElementById("area-qrcode");
 
-    botaoQrCode.addEventListener("click", () => {
-      areaQrCode.hidden = !areaQrCode.hidden;
-    });
+    if (botaoQrCode && areaQrCode) {
+      botaoQrCode.addEventListener("click", () => {
+        areaQrCode.hidden = !areaQrCode.hidden;
+      });
+    }
     const menuToggle = document.querySelector(".menu-toggle");
     const navLinks = document.querySelector(".nav-links");
 

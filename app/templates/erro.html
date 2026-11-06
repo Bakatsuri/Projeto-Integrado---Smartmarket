@@ -236,6 +236,7 @@
         margin: 20px auto;
       }
     }
+    
   </style>
 </head>
 
@@ -253,7 +254,10 @@
     <div class="nav-links" id="nav-links">
 
       <form class="search-form" action="{{ url_for('produto.produto') }}" method="get" role="search">
-        <input type="search" name="q" placeholder="Pesquisar produto..." aria-label="Pesquisar produto">
+
+        <input type="search" name="q" id="campo-pesquisa" placeholder="Pesquisar produto..."
+          aria-label="Pesquisar produto" aria-autocomplete="list" aria-controls="lista-sugestoes" autocomplete="off"
+          value="{{ request.args.get('q', '') }}">
 
         <button type="submit" aria-label="Pesquisar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -262,6 +266,9 @@
             <path d="m16 16 5 5"></path>
           </svg>
         </button>
+
+        <div id="lista-sugestoes" class="search-suggestions" hidden></div>
+
       </form>
     </div>
   </nav>
@@ -292,6 +299,68 @@
         );
       });
     }
+    const campoPesquisa = document.getElementById("campo-pesquisa");
+const listaSugestoes = document.getElementById("lista-sugestoes");
+
+if (campoPesquisa && listaSugestoes) {
+    let temporizador;
+
+    campoPesquisa.addEventListener("input", () => {
+        clearTimeout(temporizador);
+
+        const consulta = campoPesquisa.value.trim();
+
+        if (consulta.length < 2) {
+            listaSugestoes.hidden = true;
+            listaSugestoes.innerHTML = "";
+            return;
+        }
+
+        temporizador = setTimeout(async () => {
+            try {
+                const resposta = await fetch(
+                    `/api/produtos/sugestoes?q=${encodeURIComponent(consulta)}`
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Erro ao buscar sugestões");
+                }
+
+                const produtos = await resposta.json();
+
+                listaSugestoes.innerHTML = "";
+
+                produtos.forEach(produto => {
+                    const opcao = document.createElement("button");
+
+                    opcao.type = "button";
+                    opcao.className = "suggestion-item";
+                    opcao.textContent = produto.nome;
+
+                    opcao.addEventListener("click", () => {
+                        window.location.href =
+                            `/produto?id=${encodeURIComponent(produto.id)}`;
+                    });
+
+                    listaSugestoes.appendChild(opcao);
+                });
+
+                listaSugestoes.hidden = produtos.length === 0;
+
+            } catch (erro) {
+                console.error("Erro no autocomplete:", erro);
+                listaSugestoes.hidden = true;
+            }
+        }, 250);
+    });
+
+    document.addEventListener("click", evento => {
+        if (!campoPesquisa.contains(evento.target) &&
+            !listaSugestoes.contains(evento.target)) {
+            listaSugestoes.hidden = true;
+        }
+    });
+}
   </script>
 </body>
 

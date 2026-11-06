@@ -77,6 +77,7 @@
     }
 
     .search-form {
+      position: relative;
       display: flex;
       width: min(100%, 360px);
       margin-left: auto;
@@ -113,6 +114,58 @@
 
     .search-form button:hover {
       background: var(--primary-dark);
+    }
+
+    /* AUTOCOMPLETE DA PESQUISA */
+    .search-suggestions {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 100%;
+      max-height: 280px;
+      overflow-y: auto;
+      z-index: 1000;
+
+      display: flex;
+      flex-direction: column;
+
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    }
+
+    .search-suggestions[hidden] {
+      display: none;
+    }
+
+    .search-suggestions .suggestion-item {
+      display: block;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 14px;
+
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+
+      background: #ffffff;
+      color: var(--text);
+
+      text-align: left;
+      font-weight: 400;
+      cursor: pointer;
+
+      white-space: normal;
+      overflow-wrap: break-word;
+    }
+
+    .search-suggestions .suggestion-item:last-child {
+      border-bottom: 0;
+    }
+
+    .search-suggestions .suggestion-item:hover {
+      background: #edf4ef;
     }
 
     .search-form svg {
@@ -319,7 +372,9 @@
 
 
       <form class="search-form" action="{{ url_for('produto.produto') }}" method="get" role="search">
-        <input type="search" name="q" placeholder="Pesquisar produto..." aria-label="Pesquisar produto"
+
+        <input type="search" name="q" id="campo-pesquisa" placeholder="Pesquisar produto..."
+          aria-label="Pesquisar produto" aria-autocomplete="list" aria-controls="lista-sugestoes" autocomplete="off"
           value="{{ request.args.get('q', '') }}">
 
         <button type="submit" aria-label="Pesquisar">
@@ -329,13 +384,16 @@
             <path d="m16 16 5 5"></path>
           </svg>
         </button>
+
+        <div id="lista-sugestoes" class="search-suggestions" hidden></div>
+
       </form>
     </div>
   </nav>
 
   <main>
     <h1>Bem-vindo</h1>
-    <p></p>
+    <p>Encontre o que procura de forma rápida e prática! Pesquise produtos pelo nome ou utilize os QR Codes para acessar suas informações. Consulte preços, ingredientes, informações nutricionais e localização de cada produto dentro da loja.</p>
     {% set modo_mapa = 'home' %}
     {% include 'mapa.html' %}
     <div class="qrcode-container">
@@ -358,6 +416,68 @@
   </main>
 
   <script>
+    const campoPesquisa = document.getElementById("campo-pesquisa");
+    const listaSugestoes = document.getElementById("lista-sugestoes");
+
+    if (campoPesquisa && listaSugestoes) {
+      let temporizador;
+
+      campoPesquisa.addEventListener("input", () => {
+        clearTimeout(temporizador);
+
+        const consulta = campoPesquisa.value.trim();
+
+        if (consulta.length < 2) {
+          listaSugestoes.hidden = true;
+          listaSugestoes.innerHTML = "";
+          return;
+        }
+
+        temporizador = setTimeout(async () => {
+          try {
+            const resposta = await fetch(
+              `/api/produtos/sugestoes?q=${encodeURIComponent(consulta)}`
+            );
+
+            if (!resposta.ok) {
+              throw new Error("Erro ao buscar sugestões");
+            }
+
+            const produtos = await resposta.json();
+
+            listaSugestoes.innerHTML = "";
+
+            produtos.forEach(produto => {
+              const opcao = document.createElement("button");
+
+              opcao.type = "button";
+              opcao.className = "suggestion-item";
+              opcao.textContent = produto.nome;
+
+              opcao.addEventListener("click", () => {
+                window.location.href =
+                  `/produto?id=${encodeURIComponent(produto.id)}`;
+              });
+
+              listaSugestoes.appendChild(opcao);
+            });
+
+            listaSugestoes.hidden = produtos.length === 0;
+
+          } catch (erro) {
+            console.error("Erro no autocomplete:", erro);
+            listaSugestoes.hidden = true;
+          }
+        }, 250);
+      });
+
+      document.addEventListener("click", evento => {
+        if (!campoPesquisa.contains(evento.target) &&
+          !listaSugestoes.contains(evento.target)) {
+          listaSugestoes.hidden = true;
+        }
+      });
+    }
     const botaoQrHome = document.getElementById("mostrar-qrcode-home");
     const areaQrHome = document.getElementById("area-qrcode-home");
 

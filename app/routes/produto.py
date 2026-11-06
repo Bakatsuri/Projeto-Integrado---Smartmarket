@@ -1,5 +1,4 @@
-
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 
 import sys
 from pathlib import Path
@@ -12,11 +11,28 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 sys.path.append(str(BASE_DIR / "services"))
 sys.path.append(str(BASE_DIR / "scripts"))
 
-from sheets import buscar_por_id, buscar_por_nome # type: ignore
+from sheets import buscar_por_id, buscar_por_nome, buscar_sugestoes # type: ignore
 from gerar_qrcode import gerar_qrcode # type: ignore
 
 produto_bp = Blueprint("produto", __name__)
 
+@produto_bp.route("/api/produtos/sugestoes")
+def sugestoes_produtos():
+    nome = request.args.get("q", "").strip()
+
+    if len(nome) < 2:
+        return jsonify([])
+
+    sugestoes = buscar_sugestoes(nome)
+
+    return jsonify([
+        {
+            "id": produto["id"],
+            "nome": produto["nome"]
+        }
+        for produto in sugestoes
+    ])
+    
 @produto_bp.route("/qrcode/<int:produto_id>")
 def qrcode_produto(produto_id):
     # Verifica se o produto existe
@@ -50,7 +66,7 @@ def produto():
     id_produto = request.args.get("id")
     nome = request.args.get("q", "").strip()
 
-    # Acesso direto pelo ID (QR Code ou link)
+    # Acesso direto pelo ID (QR Code ou sugestão)
     if id_produto:
         dados_produto = buscar_por_id(id_produto)
 
@@ -61,26 +77,31 @@ def produto():
                 descricao="Produto não encontrado"
             ), 404
 
-        return render_template("produto.html", produto=dados_produto)
+        return render_template(
+            "produto.html",
+            produto=dados_produto
+        )
 
-
+    # Pesquisa pelo nome
     if nome:
         resultados = buscar_por_nome(nome)
 
         if len(resultados) == 1:
             return render_template(
                 "produto.html",
-                produto=buscar_por_id(resultados[0]["id"])
+                produto=resultados[0]
             )
 
-#        if len(resultados) > 1:
-#            return render_template(
-#                "resultados.html",
-#                produtos=resultados,
-#                busca=nome
-#            )
+        return render_template(
+            "produto.html",
+            produto=None,
+            resultados=resultados,
+            busca=nome
+        )
 
-
-
-    return render_template("produto.html", produto=None)
-
+    return render_template(
+        "produto.html",
+        produto=None,
+        resultados=[],
+        busca=""
+    )
